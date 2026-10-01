@@ -100,5 +100,4 @@ pipeline {
         always {
             sh 'rm -f tg_message.txt'
         }
-    }
-}
+  
