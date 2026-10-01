@@ -22,6 +22,7 @@ pipeline {
 
     options {
         timeout(time: 15, unit: 'MINUTES')
+        disableConcurrentBuilds()
     }
 
     environment {
@@ -54,7 +55,12 @@ pipeline {
             steps {
                 // Vercel in URL ra stdout, log ra stderr
                 sh '''
-                    npx --yes vercel@latest deploy --prod --yes \
+                    if command -v vercel >/dev/null 2>&1; then
+                        VERCEL_CMD="vercel"
+                    else
+                        VERCEL_CMD="npx --yes vercel@latest"
+                    fi
+                    $VERCEL_CMD deploy --prod --yes \
                         > deploy_url.txt 2> deploy_error.log
                 '''
                 script {
